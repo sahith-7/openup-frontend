@@ -1,0 +1,340 @@
+/* ============================================================
+   OpenUp - Global Styles
+   ============================================================
+   CSS custom properties (variables) are defined here.
+   To change the theme: update the values in :root
+   Dark mode variables are in [data-theme="dark"]
+   ============================================================ */
+
+/* ✅ CORRECT - @import at the top */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400...');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* rest of your CSS... */
+
+/* ============================================================
+   CSS Custom Properties (Design Tokens)
+   CUSTOMIZE colors, spacing, and effects here
+   ============================================================ */
+:root {
+  /* Brand Colors */
+  --color-brand: #FF6B35;
+  --color-brand-light: #FF8C61;
+  --color-brand-dark: #E5501A;
+  --color-brand-glow: rgba(255, 107, 53, 0.12);
+
+  /* Light Mode Background */
+  --bg-primary: #FEFAF7;
+  --bg-secondary: #FFF8F3;
+  --bg-tertiary: #F5EDE3;
+  --bg-card: #FFFFFF;
+  --bg-overlay: rgba(255, 248, 243, 0.95);
+
+  /* Light Mode Text */
+  --text-primary: #1A1410;
+  --text-secondary: #4A3D35;
+  --text-muted: #8B7D74;
+  --text-placeholder: #B5A89E;
+
+  /* Light Mode Borders */
+  --border-light: rgba(139, 125, 116, 0.12);
+  --border-medium: rgba(139, 125, 116, 0.25);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(45, 36, 32, 0.06);
+  --shadow-md: 0 4px 16px rgba(45, 36, 32, 0.1);
+  --shadow-lg: 0 8px 32px rgba(45, 36, 32, 0.15);
+  --shadow-brand: 0 4px 20px rgba(255, 107, 53, 0.15);
+  --shadow-brand-lg: 0 8px 40px rgba(255, 107, 53, 0.25);
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-sans: 'DM Sans', Inter, system-ui, sans-serif;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Navbar height */
+  --navbar-height: 64px;
+}
+
+/* ============================================================
+   Dark Mode Variables
+   ============================================================ */
+.dark {
+  --bg-primary: #0F0C0A;
+  --bg-secondary: #1A1410;
+  --bg-tertiary: #2D2420;
+  --bg-card: #1E1814;
+  --bg-overlay: rgba(26, 20, 16, 0.97);
+
+  --text-primary: #F5EDE3;
+  --text-secondary: #C8B9AD;
+  --text-muted: #7A6E68;
+  --text-placeholder: #5A524C;
+
+  --border-light: rgba(255, 248, 243, 0.06);
+  --border-medium: rgba(255, 248, 243, 0.12);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================================
+   Base Reset & Defaults
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  transition: background-color var(--transition-slow), color var(--transition-slow);
+}
+
+/* ============================================================
+   Typography Utilities
+   ============================================================ */
+.font-display {
+  font-family: var(--font-display);
+}
+
+h1, h2, h3 {
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   Custom Scrollbar
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand);
+}
+
+/* ============================================================
+   Selection Color
+   ============================================================ */
+::selection {
+  background: rgba(255, 107, 53, 0.2);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   Reusable Component Classes
+   Use these across your components for consistency
+   ============================================================ */
+@layer components {
+
+  /* --- Buttons --- */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all duration-200 select-none;
+    background: linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 100%);
+    box-shadow: var(--shadow-brand);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-brand-lg);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200 select-none;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-medium);
+  }
+  .btn-secondary:hover {
+    border-color: var(--color-brand);
+    color: var(--color-brand);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 select-none;
+    color: var(--text-secondary);
+  }
+  .btn-ghost:hover {
+    background: var(--bg-tertiary);
+    color: var(--color-brand);
+  }
+
+  /* --- Cards --- */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
+  }
+  .card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-medium);
+  }
+  .card-interactive:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* --- Inputs --- */
+  .input {
+    @apply w-full px-4 py-3 rounded-xl text-sm transition-all duration-200 outline-none;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-medium);
+  }
+  .input:focus {
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 3px var(--color-brand-glow);
+  }
+  .input::placeholder {
+    color: var(--text-placeholder);
+  }
+
+  /* --- Section headings --- */
+  .section-label {
+    @apply text-xs font-semibold uppercase tracking-widest;
+    color: var(--color-brand);
+  }
+
+  /* --- Divider --- */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border-light);
+  }
+
+  /* --- Avatar --- */
+  .avatar {
+    @apply rounded-full object-cover bg-center bg-cover flex-shrink-0;
+    background-color: var(--bg-tertiary);
+  }
+
+  /* --- Badge --- */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  /* --- Gradient text --- */
+  .gradient-text {
+    background: linear-gradient(135deg, var(--color-brand) 0%, #FF8C61 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* --- Glass morphism panel --- */
+  .glass {
+    background: var(--bg-overlay);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+/* ============================================================
+   TipTap Editor Styles
+   ============================================================ */
+.ProseMirror {
+  outline: none;
+  min-height: 300px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--text-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror h1 { font-size: 2rem; font-family: var(--font-display); margin-bottom: 1rem; }
+.ProseMirror h2 { font-size: 1.5rem; font-family: var(--font-display); margin-bottom: 0.75rem; }
+.ProseMirror h3 { font-size: 1.25rem; font-family: var(--font-display); margin-bottom: 0.5rem; }
+.ProseMirror p { margin-bottom: 1rem; }
+.ProseMirror strong { font-weight: 700; color: var(--color-brand); }
+.ProseMirror em { font-style: italic; }
+.ProseMirror code {
+  font-family: var(--font-mono, monospace);
+  background: var(--bg-tertiary);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.875em;
+}
+
+/* ============================================================
+   Intro Animation (Logo Splash)
+   ============================================================ */
+@keyframes logoSplash {
+  0%   { transform: scale(0.5) translateY(30px); opacity: 0; }
+  40%  { transform: scale(1.08) translateY(0);   opacity: 1; }
+  70%  { transform: scale(1) translateY(0);       opacity: 1; }
+  100% { transform: scale(0.4) translateY(-60vh) translateX(calc(50vw - 80px)); opacity: 1; }
+}
+
+@keyframes splashFadeOut {
+  0%   { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; pointer-events: none; }
+}
+
+.intro-container {
+  animation: splashFadeOut 2.2s ease forwards;
+}
+
+.intro-logo {
+  animation: logoSplash 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Page fade in after splash */
+@keyframes pageReveal {
+  0%   { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.page-reveal {
+  animation: pageReveal 0.6s ease 1.8s both;
+}
