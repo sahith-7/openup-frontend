@@ -3,6 +3,7 @@
 // ============================================================
 // Full post creation and editing page with AI assistant
 // ============================================================
+export const dynamic = 'force-dynamic';
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";

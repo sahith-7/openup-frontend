@@ -1,6 +1,7 @@
 // ============================================================
 // OpenUp - Personalized Feed Page
 // ============================================================
+export const dynamic = 'force-dynamic';
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";

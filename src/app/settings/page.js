@@ -5,6 +5,7 @@
 // To add new fields: add them to the FIELDS array and
 // include them in the form state.
 // ============================================================
+export const dynamic = 'force-dynamic';
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
