@@ -4,17 +4,32 @@
 // Full post creation and editing page with AI assistant
 // ============================================================
 export const dynamic = 'force-dynamic';
+
 "use client";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { Suspense } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import useAuthStore from "@/store/authStore";
 import Navbar from "@/components/layout/Navbar";
-import RichEditor from "@/components/write/RichEditor";
 import AIAssistantPanel from "@/components/write/AIAssistantPanel";
 import { postsAPI } from "@/lib/api";
 import Link from "next/link";
 
+// ─── Inner component (uses useSearchParams — must be inside Suspense) ───
+function WritePageInner() {
+  const params = useSearchParams();   // ← moved inside here
+  // ... ALL your existing code stays exactly the same from here down ...
+}
+
+// ─── Default export wraps inner component in Suspense ───────────────────
+export default function WritePage() {
+  return (
+    <Suspense fallback={null}>
+      <WritePageInner />
+    </Suspense>
+  );
+}
 // Post type options — ADD new types here
 const POST_TYPES = [
   { value:"story",   label:"📖 Story",   desc:"A narrative piece" },
