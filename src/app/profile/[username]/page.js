@@ -1,8 +1,9 @@
 // ============================================================
 // OpenUp - User Profile Page
 // ============================================================
-export const dynamic = 'force-dynamic';
 "use client";
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";

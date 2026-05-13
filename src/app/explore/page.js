@@ -1,8 +1,9 @@
 // ============================================================
 // OpenUp - Explore / Public Feed Page
 // ============================================================
-export const dynamic = 'force-dynamic';
 "use client";
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import PostCard from "@/components/feed/PostCard";
