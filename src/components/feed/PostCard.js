@@ -25,11 +25,30 @@ const POST_TYPE_CONFIG = {
   thought: { label: "Thought", color: "#10b981", bg: "rgba(16,185,129,0.1)", emoji: "💭" },
 };
 
-export default function PostCard({ post, showAuthor = true, compact = false }) {
-  const { isLoggedIn } = useAuthStore();
+export default function PostCard({ post, showAuthor = true, compact = false, onDelete }) {
+  const { isLoggedIn, user } = useAuthStore();
   const [liked, setLiked]       = useState(post.likes?.includes?.(post._id) || false);
   const [likesCount, setLikes]  = useState(post.likesCount || post.likes?.length || 0);
   const [liking, setLiking]     = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const isOwner = user?._id === post.author?._id || user?.id === post.author?._id;
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+    setDeleting(true);
+    try {
+      await postsAPI.delete(post._id);
+      toast.success("Post deleted!");
+      if (onDelete) onDelete(post._id);
+    } catch {
+      toast.error("Failed to delete post");
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const typeConfig = POST_TYPE_CONFIG[post.type] || POST_TYPE_CONFIG.thought;
 
@@ -221,6 +240,28 @@ export default function PostCard({ post, showAuthor = true, compact = false }) {
             </button>
           </div>
         </div>
+
+        {/* Owner actions */}
+        {isOwner && (
+          <div className="flex items-center gap-2 mt-3 pt-3 border-t" style={{ borderColor: "var(--border-light)" }}>
+            <Link
+              href={`/write?edit=${post._id}`}
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg transition-all"
+              style={{ background: "var(--bg-tertiary)", color: "var(--text-secondary)" }}
+            >
+              ✏️ Edit
+            </Link>
+            <button
+              onClick={handleDelete}
+              disabled={deleting}
+              className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg transition-all"
+              style={{ background: "rgba(239,68,68,0.1)", color: "#ef4444" }}
+            >
+              {deleting ? "Deleting…" : "🗑️ Delete"}
+            </button>
+          </div>
+        )}
       </article>
     </Link>
   );
