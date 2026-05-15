@@ -64,7 +64,13 @@ function WritePageInner() {
     if (!title.trim()) { if (!isAutoSave) toast.error("Please add a title"); return; }
     setSaving(true);
     try {
-      const payload = { title, content, type, tags, status: saveStatus };
+      const payload = {
+        title: title || "",
+        content: content || "",
+        type: type || "story",
+        tags: tags || [],
+        status: saveStatus
+      };
       if (editId) { await postsAPI.update(editId, payload); }
       else        { await postsAPI.create(payload); }
       if (!isAutoSave) {
@@ -76,7 +82,7 @@ function WritePageInner() {
   };
 
   const handleAiInsert = (text) => {
-    setContent(prev => prev.replace(/<\/p>\s*$/, "") + " " + text + "</p>");
+    setContent(prev => (prev || "").replace(/<\/p>\s*$/, "") + " " + text + "</p>");
     toast.success("AI text inserted ✓");
   };
 
@@ -84,9 +90,16 @@ function WritePageInner() {
     if (e.key !== "Enter" && e.key !== ",") return;
     e.preventDefault();
     const tag = tagInput.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
-    if (tag && !tags.includes(tag) && tags.length < 5) setTags(t => [...t, tag]);
+    const currentTags = tags || [];
+    if (tag && !currentTags.includes(tag) && currentTags.length < 5) setTags(t => [...(t || []), tag]);
     setTagInput("");
   };
+
+  // Safe word count — handles undefined/null content
+  const wordCount = (content || "")
+    .replace(/<[^>]*>/g, "")
+    .split(/\s+/)
+    .filter(Boolean).length;
 
   if (isLoading || !isLoggedIn) return null;
 
@@ -148,10 +161,10 @@ function WritePageInner() {
             style={{ background:"var(--bg-card)", borderColor:"var(--border-light)" }}>
             <span className="text-xs font-medium capitalize" style={{ color:"var(--text-muted)" }}>{type} editor</span>
             <span className="text-xs" style={{ color:"var(--text-muted)" }}>
-              {content.replace(/<[^>]*>/g,"").split(/\s+/).filter(Boolean).length} words
+              {wordCount} words
             </span>
           </div>
-          <textarea value={content} onChange={e => setContent(e.target.value)}
+          <textarea value={content || ""} onChange={e => setContent(e.target.value)}
             placeholder={
               type==="poem"    ? "Let your verses take shape…"             :
               type==="quote"   ? "Write something that cuts to the truth…" :
@@ -169,24 +182,24 @@ function WritePageInner() {
             Tags <span style={{ color:"var(--text-muted)" }}>(up to 5 — press Enter to add)</span>
           </label>
           <div className="flex flex-wrap gap-2 mb-2">
-            {tags.map(tag => (
+            {(tags || []).map(tag => (
               <span key={tag} className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
                 style={{ background:"rgba(255,107,53,0.1)", color:"var(--color-brand)" }}>
                 #{tag}
-                <button onClick={() => setTags(t => t.filter(x => x !== tag))}
+                <button onClick={() => setTags(t => (t || []).filter(x => x !== tag))}
                   className="hover:text-red-500 transition-colors ml-1">×</button>
               </span>
             ))}
           </div>
           <input value={tagInput} onChange={e => setTagInput(e.target.value)} onKeyDown={addTag}
-            placeholder={tags.length < 5 ? "Type a tag and press Enter…" : "Max 5 tags reached"}
-            disabled={tags.length >= 5} className="input text-sm py-2" />
+            placeholder={(tags || []).length < 5 ? "Type a tag and press Enter…" : "Max 5 tags reached"}
+            disabled={(tags || []).length >= 5} className="input text-sm py-2" />
         </div>
 
       </div>
 
       <AIAssistantPanel open={aiOpen} onClose={() => setAiOpen(false)}
-        text={content} type={type} onInsert={handleAiInsert} />
+        text={content || ""} type={type} onInsert={handleAiInsert} />
     </div>
   );
 }
